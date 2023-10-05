@@ -1,0 +1,22 @@
+.app-container {
+  width: 100vw; /* Робимо контейнер розміром екрану */
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: aquamarine; /* Задайте бажаний фон */
+}
+
+.inner-block {
+  /* width: 200px; */
+  /* height: 50px; */
+  /* border: 2px dashed #000; */
+  position: absolute;
+  transform: translate(-50%, -50%); /* Центруємо блок відносно координат миші */
+  background-color: #fff; /* Задайте бажаний фон блоку */
+}
+
+.inner-block:hover,
+.inner-block:focus {
+  cursor: move;
+}

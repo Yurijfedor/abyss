@@ -1,0 +1,25 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #333; /* Задайте бажаний колір фону */
+}
+
+.title {
+  flex: 1; /* Розтягнемо назву на весь залишок вільного простору */
+  color: #fff; /* Задайте бажаний колір тексту назви */
+}
+
+.buttons {
+  display: flex;
+  gap: 10px; /* Додайте відступи між кнопками за бажанням */
+}
+
+.buttons button {
+  padding: 5px 10px;
+  background-color: #555; /* Задайте бажаний колір кнопок */
+  color: #fff; /* Задайте бажаний колір тексту кнопок */
+  border: none;
+  cursor: pointer;
+}
