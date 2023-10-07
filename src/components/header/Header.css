@@ -1,25 +1,55 @@
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: 10px;
   background-color: #333; /* Задайте бажаний колір фону */
 }
 
 .title {
-  flex: 1; /* Розтягнемо назву на весь залишок вільного простору */
   color: #fff; /* Задайте бажаний колір тексту назви */
+  flex-grow: 1; /* Розтягнемо назву, щоб кнопки були справа */
 }
 
 .buttons {
   display: flex;
   gap: 10px; /* Додайте відступи між кнопками за бажанням */
+  align-items: center; /* Вирівняйте кнопки по вертикалі по центру */
 }
 
 .buttons button {
-  padding: 5px 10px;
+  padding: 10px 15px;
   background-color: #555; /* Задайте бажаний колір кнопок */
   color: #fff; /* Задайте бажаний колір тексту кнопок */
   border: none;
+  border-radius: 5px;
   cursor: pointer;
+
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.buttons button:hover {
+  background-color: #fff; /* Змінюємо колір при наведенні */
+  color: #555;
+}
+
+.dropdown {
+  position: absolute;
+  top: 50px; /* Задайте відстань від кнопки */
+  right: 70px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 7px 7px 14px -1px rgba(125, 118, 125, 1);
+  display: flex;
+  flex-direction: column;
+  z-index: 1; /* Забезпечує відображення поверх інших елементів */
+}
+
+.dropdown div {
+  padding: 5px;
+  cursor: pointer;
+}
+
+.dropdown div:hover {
+  background-color: #d1bdbd;
 }

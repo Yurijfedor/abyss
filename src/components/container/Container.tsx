@@ -1,11 +1,15 @@
 import React, { useState } from "react";
-import "./Container.css"; // Підключаємо CSS для стилізації
+import Block from "../block/Block";
+import Schema from "../schema/Schema";
+import "./Container.css";
 
-function Container() {
-  const [position, setPosition] = useState({
-    x: window.innerWidth / 2,
-    y: window.innerHeight / 2,
-  });
+interface ContainerProps {
+  scale: number;
+  position: { x: number; y: number };
+  setPosition: (position: { x: number; y: number }) => void;
+}
+
+function Container({ scale, position, setPosition }: ContainerProps) {
   const [isMouseDown, setIsMouseDown] = useState(false);
 
   const handleMouseDown = () => {
@@ -31,37 +35,16 @@ function Container() {
     >
       <div
         className="inner-block"
-        style={{ left: position.x, top: position.y }}
+        style={{
+          left: position.x,
+          top: position.y,
+          transform: `scale(${scale})`,
+        }}
       >
-        {/* Вставте ваш блок і інші компоненти */}
-        <div
-          style={{
-            width: 200,
-            height: 50,
-            border: 1,
-            borderColor: "black",
-            borderStyle: "dashed",
-            backgroundColor: "orange",
-          }}
-        >
-          General
-        </div>
+        <Schema />
       </div>
     </div>
   );
 }
 
 export default Container;
-
-<div
-  style={{
-    width: 200,
-    height: 50,
-    border: 1,
-    borderColor: "black",
-    borderStyle: "dashed",
-    backgroundColor: "orange",
-  }}
->
-  General
-</div>;

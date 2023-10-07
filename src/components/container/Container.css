@@ -14,9 +14,15 @@
   position: absolute;
   transform: translate(-50%, -50%); /* Центруємо блок відносно координат миші */
   background-color: #fff; /* Задайте бажаний фон блоку */
+  transition: transform 0.3s; /* Додайте плавний перехід для зміни масштабу */
 }
 
 .inner-block:hover,
 .inner-block:focus {
   cursor: move;
+}
+
+.centered {
+  left: 50%;
+  top: 50%;
 }
