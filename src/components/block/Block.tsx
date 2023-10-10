@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaPlus, FaCheck, FaTrash, FaPen } from "react-icons/fa";
+import "../schema/Schema.css";
 
 interface Block {
   id: number;
@@ -31,6 +32,10 @@ function Block({
   const handleSaveClick = () => {
     setIsEditing(false);
     onConfirmName(block.id, editedName);
+
+    setEditedName(editedName);
+    console.log(editedName);
+    console.log(block.id);
   };
 
   const handleDeleteClick = () => {
@@ -38,7 +43,7 @@ function Block({
   };
 
   const handleAddSubBlockClick = () => {
-    onAddSubBlock(block.parentId);
+    onAddSubBlock(block.id);
   };
 
   return (
@@ -51,40 +56,54 @@ function Block({
             onChange={(e) => setEditedName(e.target.value)}
           />
         ) : (
-          <div className="block-name">{block.name}</div>
+          <div
+            className={`block-name ${
+              block.subBlocks.length > 0 ? "has-sub-blocks" : ""
+            }`}
+          >
+            {block.name}
+          </div>
         )}
-        <div className="block-actions">
-          {block.subBlocks.length === 0 ? (
-            <button onClick={handleAddSubBlockClick}>
-              <FaPlus /> {/* Кнопка для додавання підблоку */}
+
+        <div className="block-buttons">
+          <button onClick={handleAddSubBlockClick}>
+            <FaPlus /> {/* Кнопка для додавання підблоку */}
+          </button>
+          {isEditing ? (
+            <button onClick={handleSaveClick}>
+              <FaCheck /> {/* Кнопка для збереження */}
             </button>
           ) : (
-            <>
-              {isEditing ? (
-                <button onClick={handleSaveClick}>
-                  <FaCheck /> {/* Кнопка для збереження */}
-                </button>
-              ) : (
-                <button onClick={handleEditClick}>
-                  <FaPen /> {/* Кнопка для редагування */}
-                </button>
-              )}
-              <button onClick={handleDeleteClick}>
-                <FaTrash /> {/* Кнопка для видалення */}
-              </button>
-            </>
+            <button onClick={handleEditClick}>
+              <FaPen /> {/* Кнопка для редагування */}
+            </button>
           )}
+          <button onClick={handleDeleteClick}>
+            <FaTrash /> {/* Кнопка для видалення */}
+          </button>
         </div>
       </div>
-      {block.subBlocks.map((subBlock) => (
-        <Block
-          key={subBlock.id}
-          block={subBlock}
-          onAddSubBlock={onAddSubBlock}
-          onConfirmName={onConfirmName}
-          onDeleteBlock={onDeleteBlock}
-        />
-      ))}
+      {block.subBlocks.length > 1 && (
+        <div
+          className="horizontal-line"
+          style={{
+            width: `calc(100% - ${100 / block.subBlocks.length}%)`,
+          }}
+        ></div>
+      )}
+      {block.subBlocks.length > 0 && (
+        <div className="sub-blocks">
+          {block.subBlocks.map((subBlock) => (
+            <Block
+              key={subBlock.id}
+              block={subBlock}
+              onAddSubBlock={onAddSubBlock}
+              onConfirmName={onConfirmName}
+              onDeleteBlock={onDeleteBlock}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

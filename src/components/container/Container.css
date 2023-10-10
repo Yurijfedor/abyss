@@ -13,7 +13,6 @@
   /* border: 2px dashed #000; */
   position: absolute;
   transform: translate(-50%, -50%); /* Центруємо блок відносно координат миші */
-  background-color: #fff; /* Задайте бажаний фон блоку */
   transition: transform 0.3s; /* Додайте плавний перехід для зміни масштабу */
 }
 

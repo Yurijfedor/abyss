@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Block from "../block/Block";
+import "./Schema.css";
 
 function Schema() {
   const [blocks, setBlocks] = useState<Block[]>([
@@ -16,47 +17,84 @@ function Schema() {
   };
 
   const findBlockById = (blocks: Block[], id: number): Block | undefined => {
-    return blocks.find((block) => block.id === id);
+    for (const block of blocks) {
+      if (block.id === id) {
+        return block;
+      }
+
+      if (block.subBlocks.length > 0) {
+        const foundBlock = findBlockById(block.subBlocks, id);
+        if (foundBlock) {
+          return foundBlock;
+        }
+      }
+    }
+
+    return undefined;
   };
 
   const addBlock = (parentId: number | undefined) => {
     const newBlock: Block = {
-      id: generateUniqueId(), // Генеруйте унікальний ідентифікатор
-      name: "Новий блок", // Встановіть ім'я за замовчуванням
+      id: generateUniqueId(),
+      name: "Новий блок",
       subBlocks: [],
     };
-    console.log(parentId);
-    console.log(blocks);
 
-    if (parentId !== undefined) {
-      // Якщо є parentId, то шукайте батьківський блок за його id
-      const parentBlock = findBlockById(blocks, parentId);
-      console.log(parentBlock);
-      if (parentBlock) {
-        parentBlock.subBlocks.push(newBlock); // Додайте новий блок до підблоків батьківського блоку
+    setBlocks((prevBlocks) => {
+      if (parentId !== undefined) {
+        // Шукайте батьківський блок за parentId в попередньому стані
+        const parentBlock = findBlockById(prevBlocks, parentId);
+
+        if (parentBlock) {
+          // Створіть копію батьківського блоку
+          const updatedParentBlock = { ...parentBlock };
+
+          // Додайте новий блок до підблоків батьківського блоку
+          updatedParentBlock.subBlocks.push(newBlock);
+
+          // Знайдіть позицію батьківського блоку в попередньому стані
+          const parentBlockIndex = prevBlocks.findIndex(
+            (block) => block.id === parentId
+          );
+
+          // Створіть копію попереднього стану з оновленим батьківським блоком
+          const updatedBlocks = [...prevBlocks];
+          updatedBlocks[parentBlockIndex] = updatedParentBlock;
+
+          return updatedBlocks;
+        }
       }
-    } else {
-      // Якщо parentId відсутній, то додаємо блок на верхній рівень
-      blocks.push(newBlock);
-    }
 
-    setBlocks([...blocks]);
+      // Якщо parentId === undefined або не знайдено батьківський блок,
+      // додаємо новий блок на верхній рівень
+      return [...prevBlocks, newBlock];
+    });
+    console.log(blocks);
   };
 
   const confirmName = (blockId: number, newName: string) => {
-    // Спочатку, знайдіть блок за його id
-    const updatedBlocks = blocks.map((block) => {
-      if (block.id === blockId) {
-        // Якщо це потрібний блок, оновіть його ім'я
-        return {
-          ...block,
-          name: newName,
-        };
-      }
-      return block;
-    });
+    // Функція для рекурсивного оновлення імені в ієрархії блоків
+    const recursivelyUpdateName = (blocks: Block[]): Block[] => {
+      return blocks.map((block) => {
+        if (block.id === blockId) {
+          // Якщо це потрібний блок, оновіть його ім'я
+          return {
+            ...block,
+            name: newName,
+          };
+        } else if (block.subBlocks.length > 0) {
+          // Якщо у блоку є підблоки, рекурсивно оновіть їх імена
+          return {
+            ...block,
+            subBlocks: recursivelyUpdateName(block.subBlocks),
+          };
+        }
+        return block;
+      });
+    };
 
-    // Оновіть стан блоків з новим ім'ям
+    // Оновіть стан блоків з оновленим ім'ям
+    const updatedBlocks = recursivelyUpdateName(blocks);
     setBlocks(updatedBlocks);
   };
 
@@ -90,15 +128,17 @@ function Schema() {
 
   return (
     <div className="schema">
-      {blocks.map((block) => (
-        <Block
-          key={block.id}
-          block={block}
-          onAddSubBlock={addBlock}
-          onConfirmName={confirmName}
-          onDeleteBlock={deleteBlock}
-        />
-      ))}
+      <div className="blocks-container">
+        {blocks.map((block) => (
+          <Block
+            key={block.id}
+            block={block}
+            onAddSubBlock={addBlock}
+            onConfirmName={confirmName}
+            onDeleteBlock={deleteBlock}
+          />
+        ))}
+      </div>
     </div>
   );
 }
